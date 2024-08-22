@@ -36,7 +36,24 @@ Identify what is causing the problem in the code below (there's only one thing).
 
 ```{r}
 # Example 1: 
-mack_creek_lengths <- mack_creek_vertebrates %>% 
+
+datapasta::df_paste(head(mack_creek_vertebrates, 5)[, c("SAMPLEDATE", "LENGTH1", "SPECIES")])
+
+my_data <- data.frame(
+  stringsAsFactors = FALSE,
+                              SAMPLEDATE = c("10/7/87","10/7/87",
+                                             "10/7/87","10/7/87","10/7/87"),
+           LENGTH1 = c(58, 61, 89, 58, 93),
+                                 SPECIES = c("ONCL","ONCL","ONCL",
+                                             "ONCL","ONCL")
+                      )my_data <- data.frame(
+  stringsAsFactors = FALSE,
+           species = c("dite", "oncl", "rhol"),
+    mean_length_cm = c(60.5169538632573, 85.3098807803465, 37),
+      sd_length_cm = c(20.7715239707035, 36.0345579761184, 3.53553390593274)
+   )
+
+mack_creek_lengths <- my_data %>% 
   clean_names() %>% 
   select(year:sampledate) %>% 
   filter(section == "CC") %>%
@@ -46,6 +63,7 @@ mack_creek_lengths <- mack_creek_vertebrates %>%
   summarize(mean_length_cm = mean(length1, na.rm = TRUE),
             sd_length_cm = sd(length1, na.rm = TRUE)) %>% 
   ungroup()
+
 ```
 
 ### reprex 2
@@ -53,8 +71,19 @@ mack_creek_lengths <- mack_creek_vertebrates %>%
 Identify what is causing the problem in the code below (there's only one thing). Then, create a very simple reprex that would help yourself, future you, or a colleague fix the problem. **Post your reprex as an issue in your own fork on GitHub.**
 
 ```{r}
+my_data <- mack_creek_vertebrates %>% 
+  clean_names() %>% 
+  filter(species == "ONCL")
+
+datapasta::df_paste(head(my_data, 5)[, c("length1", "weight")])
+  
+my_data <- data.frame(
+     length1 = c(58, 61, 89, 58, 93),
+      weight = c(1.75, 1.95, 5.6, 2.15, 6.9)
+            )
+
 # Example 2:
-mack_creek_vertebrates %>% 
+my_data %>% 
   clean_names() %>% 
   filter(species == "ONCL") %>%
   ggplot(aes(x = length1, y = weight)) +
